@@ -4,13 +4,23 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var engine = require('ejs-mate');
+
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://quang:quang123@ds043962.mongolab.com:43962/demo');
+require('./models/Account');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var manager = require('./routes/manager');
+var customer = require('./routes/customer');
+
+require('./controllers/init');
 
 var app = express();
 
 // view engine setup
+app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -21,9 +31,34 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'This is my secret',
+  resave: true,
+  saveUninitialized: true
+}));
+
+app.all('*', function(req, res, next){
+  res.locals.title = "Demo";
+  if(req.session.user){
+    res.locals.user = req.session.user;
+    res.locals.authed = true;
+  }else{
+    res.locals.authed = false;
+  }
+  if(req.session.err){
+    res.locals.err = new String(req.session.err);
+    delete req.session.err;
+  }
+  if(req.session.success){
+    res.locals.success = new String(req.session.success);
+    delete req.session.success;
+  }
+  next();
+});
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/manager', manager);
+app.use('/profile', customer);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

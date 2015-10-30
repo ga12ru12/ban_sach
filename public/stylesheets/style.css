@@ -1,0 +1,25 @@
+body{
+    padding-top: 51px;
+}
+.containerCustom{
+    margin-top: 25px;
+}
+.page-header-custom{
+    margin-top: 0;
+}
+/*---------------------Menu---------------------*/
+.displayNameGroup{
+    margin-top: 8px;
+}
+.displayNameGroup>a{
+    color: white !important;
+}
+/*---------------------Slider---------------------*/
+.slider{
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+.slider .carousel{
+    max-width: 929px;
+    margin: auto;
+}

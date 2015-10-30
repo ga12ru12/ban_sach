@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= title %></title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">-->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="/javascripts/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body cz-shortcut-listen="true">
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <% if( typeof  user !== 'undefined'){ %>
+                <div class="btn-group pull-right displayNameGroup">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="icon-user"></i><%= user.displayName %>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <% if(user.type){ %>
+                            <li><a href="/profile">Profile</a></li>
+                        <% }else{ %>
+                            <li><a href="/manage">Manage</a></li>
+                        <% } %>
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                </div>
+            <%}else{%>
+                <form class="navbar-form navbar-right" action="/login" method="post">
+                    <div class="form-group">
+                        <input type="text" placeholder="Username" name="username" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Password" name="password" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-success">Sign in</button>
+                </form>
+            <%}%>
+        </div><!--/.navbar-collapse -->
+    </div>
+</nav>
+
+<% if(typeof err !== "undefined") { %>
+    <div class="alert alert-danger" role="alert">
+        <%= err %>
+    </div>
+<% } %>
+<% if(typeof success !== "undefined") { %>
+    <div class="alert alert-success" role="alert">
+        <%= success %>
+    </div>
+<% } %>
+
+<%- body -%>
+
+<!--<footer>-->
+    <!--<p>© Company 2014</p>-->
+<!--</footer>-->
+</body>
+</html>
