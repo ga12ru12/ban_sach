@@ -10,6 +10,7 @@ var engine = require('ejs-mate');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://quang:quang123@ds043962.mongolab.com:43962/demo');
 require('./models/Account');
+require('./models/Category');
 
 var routes = require('./routes/index');
 var manager = require('./routes/manager');

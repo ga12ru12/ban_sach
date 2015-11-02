@@ -18,5 +18,9 @@ router.post('/login', function(req, res){
     res.redirect('/');
   });
 });
+router.get('/logout', function(req, res){
+  req.session.user = null;
+  res.redirect('/');
+});
 
 module.exports = router;
