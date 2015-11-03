@@ -22,12 +22,13 @@
                         </div>
                         <!--<form method="post" action="/manager/addCategory">-->
                             <div class="modal-body">
+                                <div class="addNewCategoryError"></div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Tên thể loại</label>
+                                    <label for="nameCategory">Tên thể loại</label>
                                     <input type="text" class="form-control" id="nameCategory" placeholder="Thể loại">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">Mô tả cụ thể</label>
+                                    <label for="descriptionCategory">Mô tả cụ thể</label>
                                     <input type="text" class="form-control" id="descriptionCategory" placeholder="Nội dung">
                                 </div>
                             </div>
@@ -53,14 +54,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <% for(var i = 0; i < listCategory.length; i++){%>
-                        <tr>
-                            <th scope="row"><%= i %></th>
-                            <td><%= listCategory[i].name %></td>
-                            <td><%= listCategory[i].description %></td>
-                            <td><%= listCategory[i].lastedUpdate %></td>
-                        </tr>
-                    <%}%>
+                        <% for(var i = 0; i < listCategory.length; i++){%>
+                            <tr>
+                                <th scope="row"><%= i+1 %></th>
+                                <td><%= listCategory[i].name %></td>
+                                <td><%= listCategory[i].description %></td>
+                                <td><%= new moment(listCategory[i].lastedUpdate).format('HH:mm DD/MM/YYYY') %></td>
+                            </tr>
+                        <%}%>
                     </tbody>
                 </table>
             <% }else{ %>
@@ -79,7 +80,18 @@
                 method: 'post',
                 url: '/manager/addNewCategory',
                 data: {
-                    name:
+                    name: $('#nameCategory').val(),
+                    description: $('#descriptionCategory').val()
+                },
+                success: function(data){
+                    if(data){
+                        window.location = '/manager/';
+                    }else{
+                        $('.addNewCategoryError').html('<div class="alert alert-danger" role="alert">Thêm mới thể loại thất bại. Hãy thử lại sau!!!!</div>');
+                    }
+                },
+                error:function(err){
+                    $('.addNewCategoryError').html('<div class="alert alert-danger" role="alert">Thêm mới thể loại thất bại. Hãy thử lại sau!!!!</div>');
                 }
             })
         });

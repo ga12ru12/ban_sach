@@ -1,5 +1,23 @@
 <div class="list-group">
-    <a href="/manager/listCategory" class="list-group-item active">Thể loại sách</a>
-    <a href="/manager/listBook" class="list-group-item">Danh mục sách</a>
-    <a href="/manager/history" class="list-group-item">Đơn hàng đặt mua sách</a>
+    <a href="/manager/listCategory"
+        <% if(type === 1){%>
+            class="list-group-item active"
+        <%}else{%>
+            class="list-group-item"
+        <%}%>
+    >Thể loại sách</a>
+    <a href="/manager/listBook"
+        <% if(type === 2){%>
+            class="list-group-item active"
+        <%}else{%>
+            class="list-group-item"
+        <%}%>
+    >Danh mục sách</a>
+    <a href="/manager/history"
+        <% if(type === 3){%>
+            class="list-group-item active"
+        <%}else{%>
+            class="list-group-item"
+        <%}%>
+    >Đơn hàng đặt mua sách</a>
 </div>
