@@ -29,6 +29,10 @@ var BookSchema = new Schema({
         type: Number,
         required: true
     },
+    category: {
+        type: String,
+        ref: 'Category'
+    },
     createdDate: {
         type: Date,
         default: Date.now

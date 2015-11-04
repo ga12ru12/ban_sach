@@ -14,6 +14,9 @@ body{
 .displayNameGroup>a{
     color: white !important;
 }
+.selected{
+    background-color: #d6e9c6;
+}
 /*---------------------Slider---------------------*/
 .slider{
     margin-top: 25px;
@@ -26,4 +29,26 @@ body{
 /*---------------------Manager--------------------*/
 .imgListBook{
 
+}
+/*---------------------Index----------------------*/
+.listBook{
+    margin-bottom: 30px;
+    text-align: center;
+}
+.listBook img{
+    width: 100%;
+}
+.listBook .author {
+    font-size: 12px;
+    color: gray;
+}
+.listBook .price {
+    font-weight: 600;
+}
+.listBook .popoverHidden{
+    /*display: none;*/
+}
+.listBook .linkDetail{
+    color: black;
+    text-decoration: none;
 }
