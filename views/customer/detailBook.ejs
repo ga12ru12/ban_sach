@@ -1,0 +1,83 @@
+<% layout('layout') -%>
+
+<div class="container detailBook">
+    <div class="row">
+        <div class="col-md-4 titleBook">
+            <img src="<%= bookInfo.image %>">
+        </div>
+        <div class="col-md-8">
+            <h3><%= bookInfo.title %></h3>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-4 boldDiv">Tác giả: </div>
+                        <div class="col-md-8"><%= bookInfo.author %></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 boldDiv">Thể loại: </div>
+                        <div class="col-md-8"><%= bookInfo.category.name %></div>
+                    </div>
+                    <div class="row mediumFont">
+                        <div class="col-md-4 boldDiv">Giá tiền: </div>
+                        <div class="col-md-8 priceDiv"><%= bookInfo.price %>.000 đ</div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="boldDiv">Giới thiệu sơ lược:</div>
+                    <div><%= bookInfo.teaser %></div>
+                </div>
+            </div>
+            <br>
+            <hr>
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="input-group spinner">
+                        <input type="text" class="form-control" value="1">
+                        <div class="input-group-btn-vertical">
+                            <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+                            <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-danger btn-lg"><i class="fa fa-cart-plus fa-2x"></i>    Thêm vào giỏ hàng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="infoDiv">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Giới thiệu sách</a></li>
+            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Nhận xét</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home">
+                <%- bookInfo.content %>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="profile"></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    (function ($) {
+        $('.spinner .btn:first-of-type').on('click', function() {
+            $('.spinner input').val( parseInt($('.spinner input').val(), 10) + 1);
+        });
+        $('.spinner .btn:last-of-type').on('click', function() {
+            if(parseInt($('.spinner input').val(), 10) > 0){
+                $('.spinner input').val( parseInt($('.spinner input').val(), 10) - 1);
+            }
+        });
+        $('#myTabs a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+    })(jQuery);
+</script>

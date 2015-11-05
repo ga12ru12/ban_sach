@@ -36,4 +36,15 @@ BookCtrl.prototype.addNew = function(params, cb){
     });
 }
 
+BookCtrl.prototype.getBookById = function(bookId, cb){
+    BookModel.findById(bookId).populate('category').exec(function(err, data){
+        if(!err && data){
+            return cb(data);
+        }else{
+            if(err) console.log(err);
+            return cb(false);
+        }
+    });
+}
+
 module.exports = BookCtrl;

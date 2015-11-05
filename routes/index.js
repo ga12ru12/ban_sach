@@ -40,5 +40,20 @@ router.get('/logout', function(req, res){
   req.session.user = null;
   res.redirect('/');
 });
+router.get('/detailBook/:bookId', function(req, res){
+  if(req.params.bookId){
+    var bookCtrl = new BookCtrl();
+    bookCtrl.getBookById(req.params.bookId, function(data){
+      if(data){
+        res.render('customer/detailBook', {bookInfo: data});
+      }else{
+        req.session.error = "Lỗi hệ thống. Làm ơn thử lại sau!!!!";
+        res.redirect('/');
+      }
+    });
+  }else{
+    res.redirect('/');
+  }
+});
 
 module.exports = router;

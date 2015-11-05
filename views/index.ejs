@@ -68,7 +68,7 @@
             <% for(var j = 0; j < 4; j++){ %>
               <% if(data.listBook[i*4+j]){ %>
                 <div class="col-md-3 listBook">
-                  <a href="/detailBook" class="linkDetail">
+                  <a href="/detailBook/<%= data.listBook[i*4+j]._id %>" class="linkDetail">
                     <img src="<%= data.listBook[i*4+j].image %>">
                     <div class="title" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="<%= data.listBook[i*4+j].teaser %>" ><%= data.listBook[i*4+j].title %></div>
                     <div class="author"><%= data.listBook[i*4+j].author %></div>
