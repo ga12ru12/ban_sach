@@ -6,9 +6,124 @@
             <% include ./menu %>
         </div>
         <div class="col-md-9">
-            <h2 class="page-header">Heading</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
+            <h2 class="page-header page-header-custom"Giỏ hàng hiện tại của bạn</h2>
+
+            <% if(data.listBook && data.listBook.length){%>
+                <table class="table table-hover listCart">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tên cuốn sách</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% for(var i = 0; i < data.listBook.length; i++){%>
+                        <tr>
+                            <th scope="row"><%= i+1 %></th>
+                            <td><%= data.listBook[i].title %></td>
+                            <td>
+                                <div class="input-group spinner">
+                                    <input type="hidden" class="bookId" value="<%= data.listBook[i]._id %>">
+                                    <input type="hidden" class="bookPrice" value="<%= data.listBook[i].price %>">
+                                    <input type="text" class="form-control numberBook" value="<%= data.listBook[i].number %>">
+                                    <div class="input-group-btn-vertical">
+                                        <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
+                                        <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><%= data.listBook[i].price %>,000 đ</td>
+                            <td>
+                                <input type="hidden" value="<%= data.listBook[i]._id %>">
+                                <button type="button" class="btn btn-warning deleteBtn">Xóa</button>
+                            </td>
+                        </tr>
+                    <%}%>
+                    <tr>
+                    </tbody>
+                </table>
+                <hr>
+                <button type="button" class="btn btn-danger completeBtn">Thanh toán</button>
+            <% }else{ %>
+                <div class="noCategory">Bạn chưa mua cuốn sách nào cả</div>
+            <% } %>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Xác nhận thanh toán</h4>
+            </div>
+            <div class="modal-body">
+                <div class="content">Bạn chắc chắn muốn thanh toán giỏ hàng của bạn với tổng giá trị <b><span class="total"></span></b> chứ? </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary confirmBtn">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+//    function changeBookNumber(){
+//        var number = $(this).val();
+//        if(number){
+//            number = parseInt(number);
+//        }
+//        var bookId = $(this).parent().find('.bookId').val();
+//        $.ajax({
+//            url: '/profile/editCart',
+//            method: 'post',
+//            data: {
+//                bookId: bookId,
+//                number: number
+//            },
+//            success: function(){
+//
+//            },
+//            error: function(){
+//                alert('Have error. Please try later!!!!');
+//            }
+//        });
+//    }
+    $(function(){
+        var listCart = [];
+        $('.completeBtn').click(function(){
+            var total = 0;
+            $('.listCart tbody tr').each(function(){
+                var price = parseInt($(this).find('.bookPrice').val());
+                var number = parseInt($(this).find('.numberBook').val());
+                var bookId = $(this).find('.bookId').val();
+                total += price*number;
+                listCart.push({
+                    price: price,
+                    number: number,
+                    bookId: bookId
+                });
+            });
+            $('.content .total').text(total+' đ');
+            $('#myModal').modal('show');
+        });
+        $('.confirmBtn').click(function(){
+            $.ajax({
+                url: '/profile/complete',
+                method: 'post',
+                data: listCart,
+                success: function(){
+
+                },
+                error: function(){
+                    alert('Have error. Please try later!!!!');
+                }
+            });
+        });
+    });
+</script>
