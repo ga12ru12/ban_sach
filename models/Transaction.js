@@ -8,9 +8,16 @@ var TransactionSchema = new Schema({
     listBook: [{
         bookId: String,
         bookName: String,
-        quantity: Number
+        number: Number
     }],
+    userId: {
+        type: String,
+        ref: 'Account'
+    },
     total: Number,
+    name: String,
+    address: String,
+    phone: String,
     createdDate: {
         type: Date,
         default: Date.now
@@ -20,3 +27,5 @@ var TransactionSchema = new Schema({
         default: Date.now
     }
 });
+
+mongoose.model('Transaction', TransactionSchema, 'Transaction');

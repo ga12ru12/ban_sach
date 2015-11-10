@@ -73,6 +73,12 @@ hr {
 .detailBook .infoDiv{
     margin-top: 30px;
 }
+.listCart .spinner{
+    margin-top: 0;
+}
+.containerCustom .completeBtn{
+    float: right;
+}
 
 /*-------------------------*/
 .spinner {

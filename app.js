@@ -6,12 +6,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var engine = require('ejs-mate');
+var moment = require('moment');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://quang:quang123@ds043962.mongolab.com:43962/demo');
 require('./models/Account');
 require('./models/Category');
 require('./models/Book');
+require('./models/Transaction');
 
 var routes = require('./routes/index');
 var manager = require('./routes/manager');
@@ -41,6 +43,7 @@ app.use(session({
 
 app.all('*', function(req, res, next){
   res.locals.title = "Demo";
+  res.locals.moment = moment;
   if(req.session.user){
     res.locals.user = req.session.user;
     res.locals.authed = true;
@@ -59,8 +62,20 @@ app.all('*', function(req, res, next){
 });
 
 app.use('/', routes);
-app.use('/manager', manager);
-app.use('/profile', customer);
+app.use('/manager', function(req, res, next){
+  if(req.session.user){
+    next();
+  }else{
+    res.redirect('/');
+  }
+}, manager);
+app.use('/profile', function(req, res, next){
+  if(req.session.user){
+    next();
+  }else{
+    res.redirect('/');
+  }
+}, customer);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

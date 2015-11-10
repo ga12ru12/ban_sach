@@ -31,7 +31,7 @@
             <br>
             <hr>
             <br>
-            <% if(user.type){ %>
+            <% if(typeof user !== "undefined" && user.type){ %>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="input-group spinner">
@@ -77,6 +77,7 @@
             </div>
             <div class="modal-body">
                 Xin vui lòng xác nhận thêm vào giỏ sách của bạn:
+                <input type="hidden" class="bookId" value="<%= bookInfo._id %>">
                     <ul>
                         <li>Tên sách: <b><%= bookInfo.title %></b></li>
                         <li>Số lượng: <b><span class="numberBook"></span></b></li>
@@ -110,5 +111,21 @@
             e.preventDefault()
             $(this).tab('show')
         })
+        $('.comfirmBtn').click(function(){
+            $.ajax({
+                url: '/profile/addCart',
+                method: 'post',
+                data: {
+                    bookId: $('.bookId').val(),
+                    number: parseInt($('.spinner input').val(), 10)
+                },
+                success: function(){
+                    $('#myModal').modal('hide');
+                },
+                error: function(){
+                    alert('Have error. Please try later!!!!');
+                }
+            })
+        });
     })(jQuery);
 </script>

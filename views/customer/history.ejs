@@ -1,0 +1,85 @@
+<% layout('layout') -%>
+<div class="container containerCustom">
+    <div class="row">
+        <div class="col-md-3">
+            <% include ./menu %>
+        </div>
+        <div class="col-md-9">
+            <h2 class="page-header page-header-custom">Lịch sử giao dịch của bạn</h2>
+
+            <% if(listTransaction && listTransaction.length){%>
+            <table class="table table-hover listTransaction">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Người nhận</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Tổng tiền</th>
+                    <th>Ngày giao dịch</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% for(var i = 0; i < listTransaction.length; i++){%>
+                <tr>
+                    <input type="hidden" value="<%= listTransaction[i]._id %>" class="transactionId">
+                    <th scope="row"><%= i+1 %></th>
+                    <td><%= listTransaction[i].name %></td>
+                    <td><%= listTransaction[i].phone %></td>
+                    <td><%= listTransaction[i].address %></td>
+                    <td><%= listTransaction[i].total %>,000 đ</td>
+                    <td><%= new moment(listTransaction[i].createdDate).format('HH:mm DD/MM/YYYY') %></td>
+                </tr>
+                <%}%>
+                </tbody>
+            </table>
+            <% }else{ %>
+            <div class="noCategory">Chưa có giao dịch nào cả</div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Thông tin chi tiết giao dịch</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function(){
+        $('.listTransaction tbody tr').click(function(){
+            $.ajax({
+                url: '/profile/getTractionById',
+                method: 'post',
+                data: {
+                    id: $('.transactionId').val()
+                },
+                success: function(data){
+//                    alert(JSON.stringify(data));
+                    var textHtml = '<table class="table table-hover listTransaction"> <thead> <tr> <th>Tên sách</th> <th>Số lượng</th></tr> </thead> <tbody>';
+                    data.listBook.forEach(function(book){
+                        textHtml += '<tr><td>'+book.bookName+'</td>'+'<td>'+(book.number || 1)+'</td></tr>';
+                    });
+                    textHtml += '</tbody> </table>';
+                    $('#myModal .modal-body').html(textHtml);
+                    $('#myModal').modal('show');
+                },
+                error: function(){
+                    alert('Have error. Please try later!!!!');
+                }
+            })
+        });
+    });
+</script>

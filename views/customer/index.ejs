@@ -6,9 +6,9 @@
             <% include ./menu %>
         </div>
         <div class="col-md-9">
-            <h2 class="page-header page-header-custom"Giỏ hàng hiện tại của bạn</h2>
+            <h2 class="page-header page-header-custom">Giỏ hàng hiện tại của bạn</h2>
 
-            <% if(data.listBook && data.listBook.length){%>
+            <% if(listBook && listBook.length){%>
                 <table class="table table-hover listCart">
                     <thead>
                     <tr>
@@ -20,29 +20,23 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <% for(var i = 0; i < data.listBook.length; i++){%>
+                    <% for(var i = 0; i < listBook.length; i++){%>
                         <tr>
                             <th scope="row"><%= i+1 %></th>
-                            <td><%= data.listBook[i].title %></td>
+                            <td><%= listBook[i].title %></td>
                             <td>
-                                <div class="input-group spinner">
-                                    <input type="hidden" class="bookId" value="<%= data.listBook[i]._id %>">
-                                    <input type="hidden" class="bookPrice" value="<%= data.listBook[i].price %>">
-                                    <input type="text" class="form-control numberBook" value="<%= data.listBook[i].number %>">
-                                    <div class="input-group-btn-vertical">
-                                        <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i></button>
-                                        <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i></button>
-                                    </div>
-                                </div>
+                                <input type="hidden" class="bookId" value="<%= listBook[i]._id %>">
+                                <input type="hidden" class="bookPrice" value="<%= listBook[i].price %>">
+                                <input type="hidden" class="bookName" value="<%= listBook[i].title %>">
+                                <input type="text" class="form-control numberBook" value="<%= listBook[i].number %>">
                             </td>
-                            <td><%= data.listBook[i].price %>,000 đ</td>
+                            <td><%= listBook[i].price %>,000 đ</td>
                             <td>
-                                <input type="hidden" value="<%= data.listBook[i]._id %>">
+                                <input type="hidden" value="<%= listBook[i]._id %>">
                                 <button type="button" class="btn btn-warning deleteBtn">Xóa</button>
                             </td>
                         </tr>
                     <%}%>
-                    <tr>
                     </tbody>
                 </table>
                 <hr>
@@ -63,6 +57,21 @@
             </div>
             <div class="modal-body">
                 <div class="content">Bạn chắc chắn muốn thanh toán giỏ hàng của bạn với tổng giá trị <b><span class="total"></span></b> chứ? </div>
+                <div>Vui lòng nhập thông tin của bạn để tiện cho việc giao hàng:</div>
+                <form>
+                    <div class="form-group">
+                        <label for="nameReceiver">Họ và tên người nhận:</label>
+                        <input type="text" class="form-control" id="nameReceiver" placeholder="Họ tên">
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneReceiver">Số điện thoại:</label>
+                        <input type="text" class="form-control" id="phoneReceiver" placeholder="Số điện thoại">
+                    </div>
+                    <div class="form-group">
+                        <label for="addressReceiver">Địa chỉ nhận:</label>
+                        <input type="text" class="form-control" id="addressReceiver" placeholder="Địa chỉ người nhận">
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
@@ -73,38 +82,18 @@
 </div>
 
 <script>
-//    function changeBookNumber(){
-//        var number = $(this).val();
-//        if(number){
-//            number = parseInt(number);
-//        }
-//        var bookId = $(this).parent().find('.bookId').val();
-//        $.ajax({
-//            url: '/profile/editCart',
-//            method: 'post',
-//            data: {
-//                bookId: bookId,
-//                number: number
-//            },
-//            success: function(){
-//
-//            },
-//            error: function(){
-//                alert('Have error. Please try later!!!!');
-//            }
-//        });
-//    }
     $(function(){
         var listCart = [];
+        var total = 0;
         $('.completeBtn').click(function(){
-            var total = 0;
             $('.listCart tbody tr').each(function(){
                 var price = parseInt($(this).find('.bookPrice').val());
+                var bookName = $(this).find('.bookName').val();
                 var number = parseInt($(this).find('.numberBook').val());
                 var bookId = $(this).find('.bookId').val();
                 total += price*number;
                 listCart.push({
-                    price: price,
+                    bookName: bookName,
                     number: number,
                     bookId: bookId
                 });
@@ -116,9 +105,15 @@
             $.ajax({
                 url: '/profile/complete',
                 method: 'post',
-                data: listCart,
+                data: {
+                    listBook: JSON.stringify(listCart),
+                    total: total,
+                    name: $('#nameReceiver').val(),
+                    phone: $('#phoneReceiver').val(),
+                    address: $('#addressReceiver').val()
+                },
                 success: function(){
-
+                    window.location = "/profile/historyTransaction";
                 },
                 error: function(){
                     alert('Have error. Please try later!!!!');
